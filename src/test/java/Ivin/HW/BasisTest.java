@@ -7,13 +7,14 @@ import org.junit.jupiter.api.*;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
+import org.openqa.selenium.support.events.EventFiringWebDriver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public abstract class BasisTest {
 
-    static WebDriver driver;
     Logger logger = LoggerFactory.getLogger("Test-Case's 1-6");
+    static EventFiringWebDriver driver;
 
     @BeforeAll
     static void initClass() {
@@ -28,7 +29,8 @@ public abstract class BasisTest {
         options.addArguments("--disable-infobars");
         options.addArguments("--disable-gpu");
 
-        driver = new ChromeDriver(options);
+        driver = new EventFiringWebDriver(new ChromeDriver(options));
+        driver.register(new WDEListener());
         driver.manage().timeouts().implicitlyWait(50, TimeUnit.SECONDS);
         driver.manage().timeouts().pageLoadTimeout(50, TimeUnit.SECONDS);
     }
